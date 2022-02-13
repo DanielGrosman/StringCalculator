@@ -37,7 +37,7 @@ struct StringCalculator {
         
         
         // throw an error if there are any negative numbers in the array
-        let negativeNumbers = intArray.filter { $0 < 1 }
+        let negativeNumbers = intArray.filter { $0 < 0 }
         if !negativeNumbers.isEmpty {
             throw StringCalculatorError.invalidNegativeNumbers(negativeNumbers)
         }
