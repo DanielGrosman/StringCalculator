@@ -11,19 +11,20 @@ struct StringCalculator {
     let controlCode = "//"
     let defaultDelimiter = ","
 
-    enum StringCalculatorError: Error, Equatable {
+    enum StringCalculatorError: Error {
         case invalidNegativeNumbers(_ negativeNumbers: [Int])
     }
 
     func add(_ numbers: String) throws -> Int {
         guard !numbers.isEmpty else { return 0 }
         
+        // if there is no control code, use the default delimiter (",")
         var delimiters: CharacterSet = .init(charactersIn: defaultDelimiter)
         
         // if the string start with control code, update the `delimiters` character set to include any custom delimiters
         if numbers.starts(with: controlCode) {
             if let delimiterValue = numbers.split(separator: "\n").first { // separate out the code in front of the new line indicator
-                let newDelimiterValue = delimiterValue.dropFirst(2) // remove the control code in front of the delimiter(s)
+                let newDelimiterValue = delimiterValue.dropFirst(controlCode.count) // remove the control code in front of the delimiter(s)
                 delimiters = CharacterSet.init(charactersIn: String(newDelimiterValue))
             }
         }
