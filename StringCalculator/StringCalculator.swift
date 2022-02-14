@@ -21,15 +21,15 @@ struct StringCalculator {
         // if there is no control code, use the default delimiter (",")
         var delimiters: CharacterSet = .init(charactersIn: defaultDelimiter)
         
-        // if the string start with control code, update the `delimiters` character set to include any custom delimiters
+        // if the string starts with control code, update the `delimiters` character set to include any custom delimiters
         if numbers.starts(with: controlCode) {
             if let delimiterValue = numbers.split(separator: "\n").first { // separate out the code in front of the new line indicator
                 let newDelimiterValue = delimiterValue.dropFirst(controlCode.count) // remove the control code in front of the delimiter(s)
-                delimiters = CharacterSet.init(charactersIn: String(newDelimiterValue))
+                delimiters = CharacterSet.init(charactersIn: String(newDelimiterValue)) // add the remaining delimiters to the character set
             }
         }
         
-        // remove the newline indicator from the string
+        // remove the newline indicator from the input string
         // convert the string to an array of integers
         // remove any values that are > 1000
         let intArray = numbers.components(separatedBy: .newlines).joined()
