@@ -16,6 +16,7 @@ struct StringCalculator {
     }
 
     func add(_ numbers: String) throws -> Int {
+        // if the string is empty, return 0
         guard !numbers.isEmpty else { return 0 }
         
         // if there is no control code, use the default delimiter (",")
@@ -23,9 +24,9 @@ struct StringCalculator {
         
         // if the string starts with control code, update the `delimiters` character set to include any custom delimiters
         if numbers.starts(with: controlCode) {
-            if let delimiterValue = numbers.split(separator: "\n").first { // separate out the code in front of the new line indicator
-                let newDelimiterValue = delimiterValue.dropFirst(controlCode.count) // remove the control code in front of the delimiter(s)
-                delimiters = CharacterSet.init(charactersIn: String(newDelimiterValue)) // add the remaining delimiters to the character set
+            if let controlCodeWithDelimiters = numbers.split(separator: "\n").first { // separate out the code in front of the new line indicator
+                let delimiterValue = controlCodeWithDelimiters.dropFirst(controlCode.count) // remove the control code in front of the delimiter(s)
+                delimiters = CharacterSet.init(charactersIn: String(delimiterValue)) // add the delimiters to the character set
             }
         }
         
@@ -35,7 +36,6 @@ struct StringCalculator {
         let intArray = numbers.components(separatedBy: .newlines).joined()
             .components(separatedBy: delimiters).compactMap { Int($0) }
             .filter { $0 <= 1000 }
-        
         
         // throw an error if there are any negative numbers in the array
         let negativeNumbers = intArray.filter { $0 < 0 }

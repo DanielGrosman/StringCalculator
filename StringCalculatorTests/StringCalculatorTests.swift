@@ -9,137 +9,133 @@ import XCTest
 @testable import StringCalculator
 
 class StringCalculatorTests: XCTestCase {
-    var sut = StringCalculator()
-    
-    override func setUpWithError() throws {}
-    
-    override func tearDownWithError() throws {}
+    let sut = StringCalculator()
     
     // Requirement #1(a) - empty strings should return 0
-    func testAdd_emptyString() throws {
-        let emptyString = ""
+    func testAdd_emptyString() {
+        let inputString = ""
         let expectedResult = 0
-
+        
         do {
-            let result = try sut.add(emptyString)
+            let result = try sut.add(inputString)
             XCTAssertEqual(result, expectedResult)
         } catch {
-            XCTFail("expected result to be 0 with an empty input string, but got error")
+            XCTFail("expected \(expectedResult) with input \(inputString), got \(error.localizedDescription)")
         }
     }
     
     // Requirement #1(b) - comma separated strings should return the sum of the numbers
-    func testAdd_commaSeparatedString() throws {
-        let commaSeparatedString = "1,2,5"
+    func testAdd_commaSeparatedString() {
+        let inputString = "1,2,5"
         let expectedResult = 8
-
+        
         do {
-            let result = try sut.add(commaSeparatedString)
+            let result = try sut.add(inputString)
             XCTAssertEqual(result, expectedResult)
         } catch {
-            XCTFail("expected result to be 8 with an input string of `1,2,5`, but got error")
+            XCTFail("expected \(expectedResult) with input \(inputString), got \(error.localizedDescription)")
         }
     }
-
+    
     // Requirement #2 - support new lines in the input format
-    func testAdd_newLine() throws {
-        let newLineString1 = "1\n,2,3"
-        let newLineString2 = "1,\n2,4"
+    func testAdd_newLine() {
+        let inputString1 = "1\n,2,3"
+        let inputString2 = "1,\n2,4"
         
         let expectedResult1 = 6
         let expectedResult2 = 7
-
+        
         do {
-            let result1 = try sut.add(newLineString1)
-            let result2 = try sut.add(newLineString2)
+            let result1 = try sut.add(inputString1)
+            let result2 = try sut.add(inputString2)
             
             XCTAssertEqual(result1, expectedResult1)
             XCTAssertEqual(result2, expectedResult2)
         } catch {
-            XCTFail("expected result1 to be 6 with an input string of `1\n,2,3`, result2 to be 7 with and input string of `1,\n2,4`, but got an error")
+            XCTFail("expected \(expectedResult1) with input \(inputString1) and \(expectedResult2) with input \(inputString2), got \(error.localizedDescription)")
         }
     }
     
     // Requirement #3 - support a custom delimiter
-    func testAdd_customDelimiter() throws {
-        let customDelimiterString1 = "//$\n1$2$3"
-        let customDelimiterString2 = "//@\n2@3@8"
+    func testAdd_customDelimiter() {
+        let inputString1 = "//$\n1$2$3"
+        let inputString2 = "//@\n2@3@8"
         
         let expectedResult1 = 6
         let expectedResult2 = 13
-
+        
         do {
-            let result1 = try sut.add(customDelimiterString1)
-            let result2 = try sut.add(customDelimiterString2)
+            let result1 = try sut.add(inputString1)
+            let result2 = try sut.add(inputString2)
             
             XCTAssertEqual(result1, expectedResult1)
             XCTAssertEqual(result2, expectedResult2)
         } catch {
-            XCTFail("expected result1 to be 6 with an input string of `//$\n1$2$3`, result2 to be 13 with and input string of `//@\n2@3@8`, but got an error")
+            XCTFail("expected \(expectedResult1) with input \(inputString1) and \(expectedResult2) with input \(inputString2), got \(error.localizedDescription)")
         }
     }
     
     // Requirement #4 - calling `add` with negative number(s) should throw an error
     func testAdd_negativeNumber() throws {
-        let stringWithNegativeNumbers = "1,2,3,-5,-7"
+        let inputString = "1,2,3,-5,-7"
         let expectedNegativeNumbers = [-5,-7]
         
         do {
-            let _ = try sut.add(stringWithNegativeNumbers)
+            let _ = try sut.add(inputString)
         } catch StringCalculator.StringCalculatorError.invalidNegativeNumbers(let negativeNumbers) {
             XCTAssertEqual(negativeNumbers, expectedNegativeNumbers)
         }
     }
     
     // Bonus #1 - numbers larger than 1000 should be ignored
-    func testAdd_numberGreaterThan1000() throws {
-        let stringWithLargeNumber = "2,1001"
+    func testAdd_numberGreaterThan1000() {
+        let inputString = "2,1001"
         let expectedResult = 2
         
         do {
-            let result = try sut.add(stringWithLargeNumber)
+            let result = try sut.add(inputString)
             XCTAssertEqual(result, expectedResult)
         } catch {
-            XCTFail("expected result to be 2 with an input string of `2,1001`, but got error")
+            XCTFail("expected \(expectedResult) with input \(inputString), got \(error.localizedDescription)")
         }
     }
     
     // Bonus #2 - delimiters can be arbitrary length
-    func testAdd_arbitraryLengthDelimiter() throws {
-        let arbitraryLengthDelimiterString = "//***\n1***2***3"
+    func testAdd_arbitraryLengthDelimiter() {
+        let inputString = "//***\n1***2***3"
         let expectedResult = 6
         
         do {
-            let result = try sut.add(arbitraryLengthDelimiterString)
+            let result = try sut.add(inputString)
             XCTAssertEqual(result, expectedResult)
         } catch {
-            XCTFail("expected result to be 6 with an input string of `//***\n1***2***3`, but got error")
+            XCTFail("expected \(expectedResult) with input \(inputString), got \(error.localizedDescription)")
         }
     }
     
     // Bonus #3 - allow for multiple delimiters
-    func testAdd_multipleDelimiters() throws {
-        let multipleDelimiterString = "//$,@\n1$2@3"
+    func testAdd_multipleDelimiters() {
+        let inputString = "//$,@\n1$2@3"
         let expectedResult = 6
         
         do {
-            let result = try sut.add(multipleDelimiterString)
+            let result = try sut.add(inputString)
             XCTAssertEqual(result, expectedResult)
         } catch {
-            XCTFail("expected result to be 6 with an input string of `//$,@\n1$2@3`, but got error")
+            XCTFail("expected \(expectedResult) with input \(inputString), got \(error.localizedDescription)")
         }
     }
     
     // Bonus #4 - allow for multiple delimiters of arbitrary length
-    func testAdd_multipleDelimitersArbitraryLength() throws {
-        let multipleDelimiterArbitraryLengthString = "//$$$$,@@\n1$$$$4@@3"
+    func testAdd_multipleDelimitersArbitraryLength() {
+        let inputString = "//$$$$,@@\n1$$$$4@@3"
         let expectedResult = 8
         
         do {
-            let result = try sut.add(multipleDelimiterArbitraryLengthString)
+            let result = try sut.add(inputString)
             XCTAssertEqual(result, expectedResult)
         } catch {
-            XCTFail("expected result to be 8 with an input string of `//$$$$,@@\n1$$$$4@@3`, but got error")
+            XCTFail("expected \(expectedResult) with input \(inputString), got \(error.localizedDescription)")
         }
     }
 }
